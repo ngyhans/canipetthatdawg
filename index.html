@@ -17,22 +17,29 @@ body {
   height: 100vh;
 }
 
+/* PET IMAGE */
 #pet {
   width: 260px;
+  height: 260px;           /* ensures square image */
+  object-fit: cover;       /* crops nicely */
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   transition: transform 0.1s, filter 0.2s;
+  animation: idle 3s ease-in-out infinite; /* idle breathing */
 }
 
+/* PETTING ANIMATION */
 .petting {
   transform: scale(1.08);
-  filter: brightness(1.1);
+  filter: brightness(1.1) saturate(1.2); /* happy glow */
 }
 
+/* SUPER HAPPY MILESTONE */
 .super-happy {
   transform: scale(1.2);
 }
 
+/* HAPPINESS BAR */
 #bar-container {
   width: 220px;
   height: 10px;
@@ -47,9 +54,16 @@ body {
   background: linear-gradient(to right, #ff9a9e, #fad0c4);
 }
 
+/* RESTART BUTTON */
 #restart {
   display: none;
   margin-top: 15px;
+}
+
+/* IDLE BREATHING ANIMATION */
+@keyframes idle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 </style>
 </head>
@@ -59,7 +73,8 @@ body {
 <h1>Pet Me 🐾</h1>
 <div id="counter">Pats: 0</div>
 
-<img id="pet" src="https://placekitten.com/300/300">
+<!-- PET IMAGE -->
+<img id="pet" src="">
 
 <div id="reaction"></div>
 
@@ -80,19 +95,30 @@ const reaction = document.getElementById("reaction");
 const bar = document.getElementById("bar");
 const restartBtn = document.getElementById("restart");
 
+/* DOG STYLE REACTIONS */
 const reactions = [
-  "purr...",
-  "happy cat 🐱",
-  "more pls",
-  "this is nice",
-  "zoomies incoming"
+  "good boy 🐶",
+  "tail wagging!",
+  "woof!",
+  "more pats pls",
+  "happy zoomies!"
 ];
+
+/* RANDOM WHITE POODLE IMAGES */
+const whitePoodles = [
+  "https://images.pexels.com/photos/26793955/pexels-photo-26793955.jpeg",
+  "https://images.pexels.com/photos/20699147/pexels-photo-20699147.jpeg",
+  "https://cdn.pixabay.com/photo/2017/09/25/13/12/poodle-2785078_1280.jpg"
+];
+
+/* SET RANDOM DOG ON LOAD */
+pet.src = whitePoodles[Math.floor(Math.random() * whitePoodles.length)];
 
 function petAnimal() {
   if (gameEnded) return;
 
   const now = Date.now();
-  if (now - lastPet < 80) return;
+  if (now - lastPet < 80) return; // prevent spam
   lastPet = now;
 
   pats++;
@@ -124,6 +150,7 @@ function endGame() {
 
 restartBtn.onclick = () => location.reload();
 
+/* EVENTS */
 pet.addEventListener("mousemove", petAnimal);
 pet.addEventListener("touchmove", petAnimal);
 </script>
