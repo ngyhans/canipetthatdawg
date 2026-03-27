@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet Game 🐾</title>
+
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(#fdfbfb, #ebedee);
+  font-family: system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#pet {
+  width: 260px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transition: transform 0.1s, filter 0.2s;
+}
+
+.petting {
+  transform: scale(1.08);
+  filter: brightness(1.1);
+}
+
+.super-happy {
+  transform: scale(1.2);
+}
+
+#bar-container {
+  width: 220px;
+  height: 10px;
+  background: #ddd;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+#bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
+}
+
+#restart {
+  display: none;
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Pet Me 🐾</h1>
+<div id="counter">Pats: 0</div>
+
+<img id="pet" src="https://placekitten.com/300/300">
+
+<div id="reaction"></div>
+
+<div id="bar-container">
+  <div id="bar"></div>
+</div>
+
+<button id="restart">Play Again</button>
+
+<script>
+let pats = 0;
+let lastPet = 0;
+let gameEnded = false;
+
+const pet = document.getElementById("pet");
+const counter = document.getElementById("counter");
+const reaction = document.getElementById("reaction");
+const bar = document.getElementById("bar");
+const restartBtn = document.getElementById("restart");
+
+const reactions = [
+  "purr...",
+  "happy cat 🐱",
+  "more pls",
+  "this is nice",
+  "zoomies incoming"
+];
+
+function petAnimal() {
+  if (gameEnded) return;
+
+  const now = Date.now();
+  if (now - lastPet < 80) return;
+  lastPet = now;
+
+  pats++;
+  counter.innerText = "Pats: " + pats;
+
+  pet.classList.add("petting");
+  setTimeout(() => pet.classList.remove("petting"), 100);
+
+  let happiness = Math.min(pats, 100);
+  bar.style.width = happiness + "%";
+
+  reaction.innerText = reactions[Math.floor(Math.random() * reactions.length)];
+
+  if (happiness >= 100) {
+    endGame();
+  }
+}
+
+function endGame() {
+  gameEnded = true;
+
+  reaction.innerText = "FULLY HAPPY 🥹💖";
+
+  pet.classList.add("super-happy");
+  document.body.style.background = "linear-gradient(#ffecd2, #fcb69f)";
+
+  restartBtn.style.display = "block";
+}
+
+restartBtn.onclick = () => location.reload();
+
+pet.addEventListener("mousemove", petAnimal);
+pet.addEventListener("touchmove", petAnimal);
+</script>
+
+</body>
+</html>
